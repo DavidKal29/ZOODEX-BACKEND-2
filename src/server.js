@@ -6,12 +6,16 @@ const dotenv = require('dotenv')
 const app = express()
 const PORT = process.env.PORT || 5000
 
+const animalsRoutes = require('./routes/animals')
+
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors({
     origin:process.env.FRONTEND_URL,
     credentials:true
 }))
+
+app.use('/animals',animalsRoutes)
 
 
 app.get('/',(req,res)=>{
