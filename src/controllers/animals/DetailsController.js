@@ -42,7 +42,7 @@ const getAnimal = async (req,res)=>{
     } catch (error) {
         console.log(error);
 
-        return res.status(500).json({error:'Error al obtener los animales de esa subcategoria'})
+        return res.status(500).json({error:'Error al obtener al animal'})
         
     }finally{
         if (conn) {
