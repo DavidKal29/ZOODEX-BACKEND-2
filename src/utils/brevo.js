@@ -5,7 +5,7 @@ apiInstance = new brevo.TransactionalEmailsApi()
 
 apiInstance.setApiKey(
     brevo.TransactionalEmailsApiApiKeys.apiKey,
-    process.env.APIKEY,
+    process.env.BREVO_API_KEY,
 )
 
 module.exports = {apiInstance,brevo}

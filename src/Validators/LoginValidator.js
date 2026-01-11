@@ -5,7 +5,7 @@ const LoginValidator = [
     body('email')
     .trim()
     .notEmpty().withMessage('Ningun campo puede estar vacío')
-    .isEmail().withMessage('El campo email debe ser un correo')
+    .isEmail().withMessage('El campo email debe ser un email válido')
     .normalizeEmail()
     .isLength({min:5,max:35}).withMessage('Email debe tener entre 5 y 35 carácteres')
     .customSanitizer((val)=>(val || '').replace(/\s+/g, ''))
