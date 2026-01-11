@@ -4,6 +4,8 @@ const {getAllAnimals, getRandomAnimals} = require('../controllers/animals/ListCo
 const {getAllFilters, getSubCategories, getSubcategoryAnimals, getDietAnimals, getTypeAnimals} = require('../controllers/animals/FiltersController')
 const {getAnimal} = require('../controllers/animals/DetailsController')
 const {getTop5Rankings, getFullRanking} = require('../controllers/animals/RankingsController')
+const {getSearchAnimals} = require('../controllers/animals/SearchController')
+
 
 router.get('/getAllAnimals/:page',getAllAnimals)
 router.get('/getRandomAnimals',getRandomAnimals)
@@ -15,6 +17,7 @@ router.get('/getTypeAnimals/:name/:page',getTypeAnimals)
 router.get('/getAnimal/:name',getAnimal)
 router.get('/getTop5Rankings',getTop5Rankings)
 router.get('/getFullRanking/:name/:page',getFullRanking)
+router.get('/getSearchAnimals/:search',getSearchAnimals)
 
 
 
