@@ -4,7 +4,7 @@ const pool = require('../database/db')
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
 
-const AuthMiddleware = async (req,res,next)=>{
+const AdminMiddleware = async (req,res,next)=>{
     let conn
     try {
         const token = req.cookies.token
@@ -50,4 +50,4 @@ const AuthMiddleware = async (req,res,next)=>{
 }
 
 
-module.exports = AuthMiddleware
+module.exports = AdminMiddleware

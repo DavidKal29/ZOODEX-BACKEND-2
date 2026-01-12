@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 5000
 
 const animalsRoutes = require('./routes/animals')
 const authRoutes = require('./routes/auth')
+const adminRoutes = require('./routes/admin')
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -18,6 +19,7 @@ app.use(cors({
 
 app.use('/animals',animalsRoutes)
 app.use('/auth',authRoutes)
+app.use('/admin',adminRoutes)
 
 
 app.get('/',(req,res)=>{
