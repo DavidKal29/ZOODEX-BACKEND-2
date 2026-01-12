@@ -176,6 +176,4 @@ const getEditAnimal = async (req,res)=>{
     }
 }
 
-
-
 module.exports = {dashboard, logout ,editProfile, getEditAnimal}
