@@ -44,7 +44,67 @@ const logout = async (req,res)=>{
     }
 }
 
+const editProfile = async (req,res)=>{
+    let conn
+    try {
+
+        const {email,username, password} = req.body
+
+        const user = req.user
+
+        conn = await pool.getConnection()
+        
+        if (password != '') {
+            const [usersPassword] = await conn.query('SELECT password FROM users WHERE id = ?',[user.id])
+
+            if (usersPassword.length === 0) {
+                return res.status(404).json({
+                    error:'No se ha podido obtener la contraseña del usuario'
+                })
+            }
+
+            const passwordIsEqual = await bcryt.compare(password, usersPassword[0].password)
+
+            if (email === user.email && username === user.username && passwordIsEqual) {
+                return res.status(400).json({
+                    error:'Asegurate de que al menos un campo sea distinto'
+                })
+            }
+
+            const newEncriptedPassword = await bcryt.hash(password,10)
+
+            await conn.query('UPDATE users SET email = ?, username = ?, password = ?',[email,username,newEncriptedPassword])
+
+            return res.status(200).json({
+                success:'Datos cambiado con éxito'
+            })
+        
+        }
+
+        if (email === user.email && username === user.username) {
+            return res.status(400).json({
+                error:'Asegurate de que al menos un campo sea distinto'
+            })
+        }else{
+            await conn.query('UPDATE users SET email = ?, username = ?',[email,username])
+
+            return res.status(200).json({
+                success:'Datos cambiado con éxito'
+            })
+        }    
+
+    } catch (error) {
+        console.log(error);
+
+        return res.status(500).json({error:'Error al iniciar sesión'})
+        
+    }finally{
+        if (conn) {
+            conn.release()
+        }
+    }
+}
 
 
 
-module.exports = {dashboard, logout}
+module.exports = {dashboard, logout ,editProfile}

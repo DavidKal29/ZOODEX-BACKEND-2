@@ -16,12 +16,12 @@ const EditProfileValidator = [
     .notEmpty().withMessage('Ningún campo puede estar vacío')
     .isLength({min:3, max:25}).withMessage('El campo username debe tener entre 3 y 25 carácteres')
     .matches(/[a-zA-z\d ]/).withMessage('Solo letras y dígitos en el nombre de usuario')
-    .customSanitizer(val=>(val || '').replace(/\s+/g), ' ')
+    .customSanitizer(val=>(val || '').replace(/\s+/g, ''))
     .escape(),
 
     body('password')
+    .optional({checkFalsy:true})
     .trim()
-    .optional()
     .matches(/\d/).withMessage('Mínimo un dígito en la contraseña')
     .matches(/[A-Z]/).withMessage('Mínimo una mayúscula en la contraseña')
     .matches(/[a-z]/).withMessage('Mínimo una minúscula en la contraseña')
