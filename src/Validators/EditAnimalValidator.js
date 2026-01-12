@@ -1,6 +1,6 @@
 const {body} = require('express-validator')
 
-const sanitize = val => (val || '').replace(/\s+/g,' ').trim();
+const sanitize = val => (val != null ? String(val) : '').replace(/\s+/g,' ').trim()
 
 const EditAnimalValidator = [
     body('name')
@@ -117,13 +117,13 @@ const EditAnimalValidator = [
     .escape(),
 
     body('inteligence')
-    .isInt({min:1,max:100}).withMessage('El peligro debe tener una puntuación entre 1 y 100')
+    .isInt({min:1,max:100}).withMessage('La inteligencia debe tener una puntuación entre 1 y 100')
     .notEmpty().withMessage('Ningún campo puede estar vacío')
     .customSanitizer(sanitize)
     .escape(),
 
     body('longevity')
-    .isInt({min:1,max:100}).withMessage('El peligro debe tener una puntuación entre 1 y 100')
+    .isInt({min:1,max:100}).withMessage('La longevidad debe tener entre 1 y 100 años')
     .notEmpty().withMessage('Ningún campo puede estar vacío')
     .customSanitizer(sanitize)
     .escape()

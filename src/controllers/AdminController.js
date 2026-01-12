@@ -161,13 +161,12 @@ const getEditAnimal = async (req,res)=>{
             animal:animal,
             metadata:metadata
         })
-
-        
+      
 
     } catch (error) {
         console.log(error);
 
-        return res.status(500).json({error:'Error al obtner el animal'})
+        return res.status(500).json({error:'Error al obtener el animal'})
         
     }finally{
         if (conn) {
@@ -176,4 +175,47 @@ const getEditAnimal = async (req,res)=>{
     }
 }
 
-module.exports = {dashboard, logout ,editProfile, getEditAnimal}
+const editAnimal = async (req,res)=>{
+    let conn
+    try {
+        conn = await pool.getConnection()
+
+        const id = req.params.id
+
+        const {name, subcategory, diet, type, weight, height,
+            inteligence, danger, longevity, speed, description
+        } = req.body
+
+        const consulta = `
+            UPDATE animals 
+            SET name = ?, id_subcategory = ?, id_diet = ?, 
+            weight = ?, height = ?, inteligence = ?,danger = ?, 
+            longevity = ?, speed = ?, description = ? 
+            WHERE id = ?
+        `
+
+        const values=[name,subcategory,diet,weight,height,inteligence,danger,longevity,speed,description,id]
+
+        await conn.query(consulta, values)
+
+        await conn.query('UPDATE animal_types SET id_type = ? WHERE id_animal = ?', [type,id])
+
+        return res.status(200).json({
+            success:'Datos enviados con éxito'
+        })
+
+    } catch (error) {
+        console.log(error);
+
+        return res.status(500).json({error:'Error al editar al animal'})
+        
+    }finally{
+        if (conn) {
+            conn.release()
+        }
+    }
+}
+
+
+
+module.exports = {dashboard, logout ,editProfile, getEditAnimal, editAnimal}
