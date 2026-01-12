@@ -33,7 +33,7 @@ const login = async (req,res)=>{
 
             const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
-            const token = jwt.sign({id}, JWT_SECRET_KEY, {expiresIn:'1h'})
+            const token = jwt.sign({id:id}, JWT_SECRET_KEY, {expiresIn:'1h'})
 
             res.cookie('token',token,cookieOptions)
 

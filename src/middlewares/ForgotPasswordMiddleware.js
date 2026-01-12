@@ -5,43 +5,40 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 
 
 const ForgotPasswordMiddleware = async (req,res,next)=>{
+    let conn
     try {
 
-        try {
-            const token = req.params.token
+        const token = req.params.token
 
-            const decoded = jwt.decode(token,JWT_SECRET_KEY)
+        const decoded = jwt.verify(token,JWT_SECRET_KEY)
 
-            const email = decoded.email
+        const email = decoded.email
 
-            const conn = await pool.getConnection()
+        conn = await pool.getConnection()
 
-            const consulta = 'SELECT * FROM users WHERE email = ? and token = ?'
+        const consulta = 'SELECT * FROM users WHERE email = ? and token = ?'
 
-            const [user_exists] = await conn.query(consulta,[email,token])
+        const [user_exists] = await conn.query(consulta,[email,token])
 
-            if (user_exists.length === 0) {
-                return res.status(404).json({
-                    error:'Enlace inválido o expirado'
-                })
-            }
-
-            req.recuperationUser = user_exists[0]
-
-            next()
-
-        } catch (error) {
-            return res.status(500).json({
+        if (user_exists.length === 0) {
+            return res.status(401).json({
                 error:'Enlace inválido o expirado'
             })
         }
-    
+
+        req.recuperationUser = user_exists[0]
+
+        next()
             
             
     } catch (error) {
-        return res.status(500).json({
-            error:'Error al validar el token de recuperación de contraseña'
+        return res.status(401).json({
+            error:'Enlace inválido o expirado'
         })
+    } finally{
+        if (conn) {
+            conn.release()
+        }
     }
 }
 
