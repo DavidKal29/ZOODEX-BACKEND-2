@@ -1,14 +1,19 @@
 const express = require('express')
 const router = express.Router()
-const {login,forgotPassword} = require('../controllers/AuthController')
-const validator = require('../middlewares/validator')
+const {login,forgotPassword,changePassword} = require('../controllers/AuthController')
 
-const {LoginValidator} = require('../Validators/LoginValidator')
+const ValidatorMiddleware = require('../middlewares/ValidatorMiddleware')
+const ForgotPasswordMiddleware = require('../middlewares/forgotPasswordMiddleware')
+
+const LoginValidator = require('../Validators/LoginValidator')
 const ForgotPasswordValidator = require('../Validators/ForgotPasswordValidator')
+const ChangePasswordValidator = require('../Validators/ChangePasswordValidator')
 
 
-router.post('/login',LoginValidator,validator,login)
-router.post('/forgotPassword',ForgotPasswordValidator,validator,forgotPassword)
+
+router.post('/login',LoginValidator,ValidatorMiddleware,login)
+router.post('/forgotPassword',ForgotPasswordValidator,ValidatorMiddleware,forgotPassword)
+router.post('/changePassword/:token',ForgotPasswordMiddleware,ChangePasswordValidator,ValidatorMiddleware,changePassword)
 
 
 

@@ -22,4 +22,4 @@ const LoginValidator = [
     .customSanitizer((val)=>(val || '').replace(/\s+/g, ''))
 ]
 
-module.exports = {LoginValidator}
+module.exports = LoginValidator

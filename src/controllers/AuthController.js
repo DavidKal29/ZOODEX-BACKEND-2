@@ -111,6 +111,52 @@ const forgotPassword = async (req,res)=>{
 }
 
 
+const changePassword = async (req,res)=>{
+    let conn
+    try {
+
+        const {new_password, confirm_password} = req.body
+
+        console.log(new_password, confirm_password);
+        
+
+        conn = await pool.getConnection()
+
+        if (new_password != confirm_password) {
+            return res.status(400).json({
+                error:'Las contraseñas no coinciden'
+            })
+        }
+
+        const passwordIsEqual = await bcryt.compare(new_password, req.recuperationUser.password)
+
+        if (passwordIsEqual) {
+            return res.status(400).json({
+                error:'La nueva contraseña no puede ser igual a la anterior'
+            })
+        }
+
+        const newEncriptedPassword = await bcryt.hash(new_password,10)
+
+        await conn.query('UPDATE users SET password = ?, token = "" WHERE email = ?',[newEncriptedPassword, req.recuperationUser.email])
+
+        return res.status(200).json(
+            {success:'Contraseña cambiada con éxito'}
+        )
+
+    } catch (error) {
+        console.log(error);
+
+        return res.status(500).json({error:'Error al cambiar la contraseña'})
+        
+    }finally{
+        if (conn) {
+            conn.release()
+        }
+    }
+}
 
 
-module.exports = {login, forgotPassword}
+
+
+module.exports = {login, forgotPassword, changePassword}
